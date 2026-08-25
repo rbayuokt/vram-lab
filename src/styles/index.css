@@ -1,0 +1,168 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------
+   VRAM LAB - visual identity
+   Graphics-debugger dark chrome: near-black deck, hairline rules,
+   monospace everywhere, phosphor accents borrowed from a CRT.
+   --------------------------------------------------------------- */
+@theme {
+  --color-void: #07080b;
+  --color-deck: #0b0e14;
+  --color-panel: #10141c;
+  --color-raise: #161c27;
+  --color-line: #232c3b;
+  --color-hair: #1a2130;
+
+  --color-ink: #dae2ee;
+  --color-dim: #8c9bb0;
+  --color-faint: #5b6a7e;
+
+  --color-mint: #4de3bd;
+  --color-amber: #ffb454;
+  --color-rose: #ff6b8b;
+  --color-azure: #62a8ff;
+  --color-lime: #9ae66e;
+  --color-violet: #b48dff;
+
+  --font-mono:
+    ui-monospace, 'SF Mono', SFMono-Regular, 'JetBrains Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  --font-sans: var(--font-mono);
+
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 5px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-hair);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-variant-ligatures: none;
+  }
+
+  /* faint grid, like a memory viewer backdrop */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  ::selection {
+    background: var(--color-mint);
+    color: var(--color-void);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line);
+    border: 2px solid var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #33405480;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-mint);
+    outline-offset: 2px;
+  }
+
+  canvas {
+    image-rendering: pixelated;
+  }
+
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 2px;
+    background: var(--color-line);
+    cursor: pointer;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--color-mint);
+    border-radius: 0;
+    cursor: pointer;
+  }
+  input[type='range']::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--color-mint);
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .hud-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+  }
+
+  .tabnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* ring drawn over the control the guide is currently talking about */
+  .guide-ring {
+    border: 1px solid var(--color-amber);
+    animation: guide-pulse 1.9s ease-out infinite;
+  }
+
+  @keyframes guide-pulse {
+    0% {
+      box-shadow:
+        0 0 0 0 rgba(255, 180, 84, 0.45),
+        0 0 22px rgba(255, 180, 84, 0.12) inset;
+    }
+    70% {
+      box-shadow:
+        0 0 0 10px rgba(255, 180, 84, 0),
+        0 0 22px rgba(255, 180, 84, 0.05) inset;
+    }
+    100% {
+      box-shadow:
+        0 0 0 0 rgba(255, 180, 84, 0),
+        0 0 22px rgba(255, 180, 84, 0.12) inset;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .guide-ring {
+      animation: none;
+      box-shadow: 0 0 0 3px rgba(255, 180, 84, 0.3);
+    }
+  }
+}
